@@ -17,11 +17,18 @@ function App() {
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0x0f172a);
 
+    // =========================
     // Camera
+    // =========================
     const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-    camera.position.set(2, 1.5, 2);
 
+    // Better angle for Z-up robotics view
+    camera.position.set(2, 2, 2);
+    camera.lookAt(0, 0, 0);
+
+    // =========================
     // Renderer
+    // =========================
     const renderer = new THREE.WebGLRenderer({ antialias: true });
     renderer.setSize(width, height);
     mountRef.current.appendChild(renderer.domElement);
@@ -41,27 +48,32 @@ function App() {
     new Floor(scene);
 
     // =========================
-    // 🔥 Frame ONLY
+    // 🔥 Frame (with axis helper)
     // =========================
-    // new Frame2020(scene);
-
-    const points = [new THREE.Vector3(0,0,0), new THREE.Vector3(1,0,0)];
-const line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(points), new THREE.LineBasicMaterial({ color: 0xff0000 }));
-scene.add(line);
-
-// scene.add(new THREE.Points(
-//   new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(0, 0, 0)]),
-//   new THREE.PointsMaterial({ color: 0xff0000, size: 0.1 })
-// ));
+    const frame = new Frame2020(scene);
 
     // =========================
     // Controls
     // =========================
     const controls = new CameraController(camera, renderer);
+
+    // Target center of robot
     controls.controls.target.set(0, 0.5, 0);
 
     // =========================
-    // Render Loop (NO animation needed)
+    // 🎮 Keyboard control (Axis toggle)
+    // =========================
+    const handleKey = (e) => {
+      if (e.key.toLowerCase() === 'a') {
+        frame.toggleAxes();
+        console.log('Axis toggled');
+      }
+    };
+
+    window.addEventListener('keydown', handleKey);
+
+    // =========================
+    // Render Loop
     // =========================
     const render = () => {
       controls.update();
@@ -84,9 +96,13 @@ scene.add(line);
 
     window.addEventListener('resize', handleResize);
 
+    // =========================
     // Cleanup
+    // =========================
     return () => {
       window.removeEventListener('resize', handleResize);
+      window.removeEventListener('keydown', handleKey);
+
       renderer.dispose();
 
       if (mountRef.current && renderer.domElement) {
