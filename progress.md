@@ -20,3 +20,17 @@ Planned system:
 Next documentation change:
 
 - Add the reviewed design specification under `docs/superpowers/specs/`.
+
+## 2026-09-23 - Implementation planning
+
+The air spring tester design was approved. Before product-code changes, create
+a task-by-task implementation plan covering:
+
+- Configuration validation and millimetre-to-world-unit conversion.
+- Reusable procedural air spring, turntable, lead-screw, and camera modules.
+- Time-based turntable and camera motion with capture callbacks.
+- React entry-point integration and responsive full-screen presentation.
+- Unit, lint, build, and rendered-browser verification.
+
+No implementation file will be modified until this plan is complete and
+reviewed.
