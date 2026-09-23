@@ -46,3 +46,13 @@ test('accepts zero motor speed and rejects invalid scale and camera values', () 
   assert.equal(config.cameras.verticalSpeedMmPerSecond, 20);
   assert.equal(warnings.length, 4);
 });
+
+test('accepts zero camera speed as a stopped initial state', () => {
+  const warnings = [];
+  const config = createAirSpringTesterConfig({
+    cameras: { verticalSpeedMmPerSecond: 0 },
+  }, (message) => warnings.push(message));
+
+  assert.equal(config.cameras.verticalSpeedMmPerSecond, 0);
+  assert.deepEqual(warnings, []);
+});

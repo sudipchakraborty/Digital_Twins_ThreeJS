@@ -52,3 +52,22 @@ test('accepts speed controls, invalid callbacks, and repeated disposal', () => {
     tester.dispose();
   });
 });
+
+test('continues capture cadence after reversing turntable direction', () => {
+  const captures = [];
+  const tester = new AirSpringTester({
+    inspection: { captureAngleStepDegrees: 30 },
+    onCapture: (capture) => captures.push(capture),
+  });
+
+  tester.start();
+  tester.update(5);
+  tester.setTurntableSpeed(-2);
+  tester.update(5);
+
+  assert.equal(captures.length, 8);
+  assert.deepEqual(
+    captures.slice(-2).map((capture) => capture.cameraId),
+    ['CAM-1', 'CAM-2'],
+  );
+});

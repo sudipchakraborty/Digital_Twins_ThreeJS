@@ -87,7 +87,8 @@ Demonstration behavior:
 
 Verification results:
 
-- `npm test`: 16/16 tests passed.
+- `npm test`: 18/18 tests passed, including zero camera speed and turntable
+  direction-reversal capture regressions.
 - `npm run lint`: passed after removing the pre-existing unused parameter.
 - `npm run build`: passed; Vite reports only its bundle-size advisory.
 - `git diff --check`: passed.
@@ -100,3 +101,10 @@ Real-system boundary:
 
 - Camera streaming, AI anomaly classification, PLC/motor-driver communication,
   encoder feedback, and mechanical force/torque behavior remain integration work.
+
+### Final review corrections
+
+- Accept an initial camera speed of `0` as a valid stopped state, matching the
+  public speed contract.
+- Keep capture cadence based on absolute rotational travel so changing the
+  turntable direction continues to emit captures at each angular interval.
