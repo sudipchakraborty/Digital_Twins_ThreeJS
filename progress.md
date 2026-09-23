@@ -43,3 +43,60 @@ The implementation plan was approved for native execution.
   `package-lock.json` change on `main` remains untouched.
 - Execute the five planned tasks using test-first development.
 - Run the local application and verify the rendered simulation before handoff.
+
+### React demonstration work started
+
+- Replace the earlier robot-frame demo with one configured `AirSpringTester`.
+- Add a neutral industrial scene, shadows, responsive camera framing, and floor.
+- Add compact run/pause, reset-view, RPM, camera-height, and capture status UI.
+- Keep all machine geometry and motion inside reusable `lib/airspring/` modules.
+- Dispose the tester, controls, floor resources, renderer, and listeners on exit.
+
+### Baseline lint correction
+
+- Remove the unused `delta` parameter from `Joint2.update()`. The method is not
+  called with or without that parameter anywhere in the project, and its motion
+  is driven directly by `Date.now()`, so this is behavior-preserving.
+
+## 2026-09-23 - Air spring tester implementation completed
+
+Implemented reusable modules:
+
+- `config.js`: millimetre-based defaults, validation, and world-unit conversion.
+- `motion.js`: RPM conversion and frame-rate-independent reflected travel.
+- `AirSpring.js`: configurable double-convoluted rubber bellows, ribs, plates,
+  and air fitting generated from Three.js geometry.
+- `Turntable.js`: base, platter, bearing, coupling, DC motor, and RPM controls.
+- `LeadScrewAxis.js`: guide rails, threaded screw, bearing blocks, and carriage.
+- `InspectionCamera.js`: industrial camera body, lens, status light, and view ray.
+- `CameraInspectionRig.js`: two opposing synchronized camera axes.
+- `InspectionController.js`: deterministic angle-based capture events.
+- `TesterFrame.js`: aluminium support frame, mounts, feet, and motor guard.
+- `AirSpringTester.js`: reusable facade with start, stop, speed, update, status,
+  callback, and disposal APIs.
+
+Demonstration behavior:
+
+- Air spring dimensions: 300 mm outer diameter, 120 mm plate/inner diameter,
+  and 260 mm height.
+- Turntable rotates at 2 RPM.
+- Both cameras begin at the 450 mm upper limit and travel downward at 20 mm/s.
+- Capture events occur every 30 degrees for both cameras.
+- Full-screen responsive scene includes shadows, orbit controls, telemetry,
+  capture status, pause/start, and reset-view controls.
+
+Verification results:
+
+- `npm test`: 16/16 tests passed.
+- `npm run lint`: passed after removing the pre-existing unused parameter.
+- `npm run build`: passed; Vite reports only its bundle-size advisory.
+- `git diff --check`: passed.
+- Development server: `http://localhost:5173/`.
+- Rendered screenshot and canvas-pixel inspection could not be performed because
+  no controllable browser was connected to this session. This remains for live
+  visual review; automated geometry, motion, build, and lint checks passed.
+
+Real-system boundary:
+
+- Camera streaming, AI anomaly classification, PLC/motor-driver communication,
+  encoder feedback, and mechanical force/torque behavior remain integration work.
