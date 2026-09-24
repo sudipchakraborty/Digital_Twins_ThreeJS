@@ -92,7 +92,8 @@ Verification results:
 - `npm run lint`: passed after removing the pre-existing unused parameter.
 - `npm run build`: passed; Vite reports only its bundle-size advisory.
 - `git diff --check`: passed.
-- Development server: `http://localhost:5173/`.
+- Development server: `http://127.0.0.1:5173/` (explicit IPv4 address; see access
+  correction below).
 - Rendered screenshot and canvas-pixel inspection could not be performed because
   no controllable browser was connected to this session. This remains for live
   visual review; automated geometry, motion, build, and lint checks passed.
@@ -108,3 +109,38 @@ Real-system boundary:
   public speed contract.
 - Keep capture cadence based on absolute rotational travel so changing the
   turntable direction continues to emit captures at each angular interval.
+
+## 2026-09-23 - Frontend demo access correction
+
+The original main checkout's Vite server listens on IPv6 loopback port 5173,
+while this feature checkout's server listens on IPv4 port 5173. As a result,
+`http://localhost:5173/` opens the original framework on this machine.
+
+Use `http://127.0.0.1:5173/` to open the air spring tester. Verified HTTP 200
+and the served `src/App.jsx` imports `AirSpringTester`; the localhost response
+instead constructs `Frame2020`. Planned runtime action: open the corrected URL
+in the default browser. Application source and dependencies are unchanged.
+
+Outcome: automatic browser launch was rejected by the execution policy. The
+page, React entry, app, and tester module each return HTTP 200 at the IPv4 URL.
+Direct visual verification remains pending; share the URL for manual opening.
+
+## 2026-09-24 - Publish air spring tester to GitHub
+
+Requested action: commit the pending demo-access documentation and push
+`feature/air-spring-tester` to `origin` at
+`https://github.com/sudipchakraborty/Digital_Twins_ThreeJS.git`.
+
+Before publication, fetch the remote, check branch history, run the unit tests,
+lint, production build, and whitespace checks, then verify that the remote branch
+points to the published local commit. The feature branch contains the original
+design/planning commits and the complete reusable tester implementation.
+
+The primary checkout's existing local `package-lock.json` and `progress.md`
+changes are outside this feature publication. Its demo-access correction is
+already recorded above in this branch.
+
+Pre-push verification on 2026-09-24: all 18 tests passed; lint passed; the
+production build passed with the existing bundle-size advisory; whitespace
+checks passed. The fetched remote has no commits missing from the feature's
+history. Rendered browser verification remains pending as previously recorded.
