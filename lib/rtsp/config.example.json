@@ -1,0 +1,17 @@
+{
+  "bridgeHost": "127.0.0.1",
+  "bridgePort": 8890,
+  "rtspPort": 8554,
+  "advertisedHost": "192.168.0.205",
+  "stream": "ptz",
+  "width": 800,
+  "height": 450,
+  "fps": 8,
+  "quality": 0.85,
+  "sourceTimeoutMs": 10000,
+  "maxFrameBytes": 2097152,
+  "encoderPreset": "ultrafast",
+  "ffmpeg": "",
+  "ffprobe": "",
+  "mediamtx": ""
+}

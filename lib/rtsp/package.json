@@ -1,0 +1,9 @@
+{
+  "name": "@estpl/canvas-rtsp",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": { "start": "node server.js", "setup": "powershell -ExecutionPolicy Bypass -File setup.ps1" },
+  "dependencies": { "ws": "^8.18.3" },
+  "engines": { "node": ">=22" }
+}

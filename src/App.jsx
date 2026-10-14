@@ -1,6 +1,7 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
 import { CameraController, Floor, Frame2020 } from '../lib/index.js';
+import { CanvasRtspPublisher } from '../lib/rtsp/CanvasRtspPublisher.js';
 
 function App() {
   const mountRef = useRef(null);
@@ -30,8 +31,20 @@ function App() {
     // Renderer
     // =========================
     const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(width, height);
+    // Keep a stable stream resolution while CSS scales the live view to fit.
+    renderer.setSize(800, 450, false);
     mountRef.current.appendChild(renderer.domElement);
+    renderer.domElement.style.width = '100%';
+    renderer.domElement.style.height = '100%';
+
+    const rtspPublisher = new CanvasRtspPublisher({
+      canvas: renderer.domElement,
+      stream: 'ptz',
+      fps: 8,
+      quality: 0.85,
+      onStatus: (status) => console.info(`[RTSP] ${status.message}`, status.rtspUrl),
+    });
+    rtspPublisher.start();
 
     // =========================
     // Lights
@@ -91,7 +104,8 @@ function App() {
 
       camera.aspect = w / h;
       camera.updateProjectionMatrix();
-      renderer.setSize(w, h);
+      renderer.domElement.style.width = `${w}px`;
+      renderer.domElement.style.height = `${h}px`;
     };
 
     window.addEventListener('resize', handleResize);
@@ -102,6 +116,7 @@ function App() {
     return () => {
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('keydown', handleKey);
+      rtspPublisher.dispose();
 
       renderer.dispose();
 

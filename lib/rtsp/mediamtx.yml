@@ -1,0 +1,29 @@
+# Example; runtime.js writes the same configuration for the selected port/path.
+logLevel: info
+rtsp: true
+rtspAddress: :8554
+rtspTransports: [tcp]
+rtmp: false
+hls: false
+webrtc: false
+srt: false
+moq: false
+api: false
+metrics: false
+pprof: false
+playback: false
+authInternalUsers:
+  - user: any
+    ips: ['127.0.0.1', '::1']
+    permissions:
+      - action: publish
+        path: ptz
+  - user: any
+    ips: []
+    permissions:
+      - action: read
+        path: ptz
+paths:
+  ptz:
+    source: publisher
+    overridePublisher: false
